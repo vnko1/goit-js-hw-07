@@ -26,31 +26,29 @@ function galleryMarkup(galleryItems) {
     .join("");
 }
 
+function createLightBox(source) {
+  return basicLightbox.create(
+    `
+	<img src="${source}" width="800" height="600">
+`,
+    {
+      onClose: () =>
+        document.removeEventListener("keydown", onEscCloseLightBox),
+    }
+  );
+}
+
 function onModalOpenClick(e) {
   e.preventDefault();
 
   if (e.target.nodeName !== "IMG") return;
 
   instance = createLightBox(e.target.dataset.source);
-  instance.show();
-  window.addEventListener("keydown", onEscCloseLightBox);
-}
-
-function createLightBox(source) {
-  return basicLightbox.create(
-    `
-	<img src="${source}" width="800" height="600">
-`
-  );
+  instance.show(() => document.addEventListener("keydown", onEscCloseLightBox));
 }
 
 function onEscCloseLightBox(e) {
   if (e.code === "Escape") {
     instance.close();
-    removeEventListener();
   }
-}
-
-function removeEventListener() {
-  window.removeEventListener("keydown", onEscCloseLightBox);
 }
