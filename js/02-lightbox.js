@@ -5,8 +5,6 @@ const galleryContainer = document.querySelector(".gallery");
 
 galleryContainer.insertAdjacentHTML("beforeend", galleryMarkup(galleryItems));
 
-galleryContainer.addEventListener("click", onLightBoxOpenClick);
-
 function galleryMarkup(galleryItems) {
   return galleryItems
     .map(
@@ -22,12 +20,7 @@ function galleryMarkup(galleryItems) {
     .join("");
 }
 
-function onLightBoxOpenClick(e) {
-  e.preventDefault();
-  if (e.target.nodeName !== "IMG") return;
-
-  new SimpleLightbox(".gallery a", {
-    captionsData: "alt",
-    captionDelay: 250,
-  });
-}
+new SimpleLightbox(".gallery a", {
+  captionsData: "alt",
+  captionDelay: 250,
+});
