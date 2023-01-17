@@ -1,5 +1,7 @@
 import { galleryItems } from "./gallery-items.js";
 
+let instance;
+
 const galleryContainer = document.querySelector(".gallery");
 
 galleryContainer.insertAdjacentHTML("beforeend", galleryMarkup(galleryItems));
@@ -26,24 +28,29 @@ function galleryMarkup(galleryItems) {
 
 function onModalOpenClick(e) {
   e.preventDefault();
+
   if (e.target.nodeName !== "IMG") return;
 
-  createLightBox(e.target.dataset.source);
-  document.addEventListener("keydown", onCloseLightBoxEsc);
-  document.addEventListener("click", onCloseLightBoxClick);
+  instance = createLightBox(e.target.dataset.source);
+  instance.show();
+  window.addEventListener("keydown", onEscCloseLightBox);
 }
 
-// function onCloseLightBox(e) {
-//   document;
-// }
-
 function createLightBox(source) {
-  basicLightbox
-    .create(
-      `
+  return basicLightbox.create(
+    `
 	<img src="${source}" width="800" height="600">
-`,
-      { closable: false }
-    )
-    .show();
+`
+  );
+}
+
+function onEscCloseLightBox(e) {
+  if (e.code === "Escape") {
+    instance.close();
+    removeEventListener();
+  }
+}
+
+function removeEventListener() {
+  window.removeEventListener("keydown", onEscCloseLightBox);
 }
